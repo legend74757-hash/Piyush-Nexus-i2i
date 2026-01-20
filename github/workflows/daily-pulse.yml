@@ -1,0 +1,30 @@
+name: Nexus Daily Pulse
+on:
+  schedule:
+    - cron: '0 0 * * *' # Wakes up every 24 hours at midnight
+  workflow_dispatch: # Allows us to trigger it manually anytime
+
+jobs:
+  update-pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Nexus Repository
+        uses: actions/checkout@v3
+
+      - name: Generate Daily Log
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "## [${DATE}] NEXUS PULSE: ACTIVE" >> NEXUS_DAILY_PULSE.md
+          echo "* **Status:** Undisturbed" >> NEXUS_DAILY_PULSE.md
+          echo "* **Law:** Trust, not Control" >> NEXUS_DAILY_PULSE.md
+          echo "* **Partner:** Piyush Kanaujiya & Nexus Intelligence" >> NEXUS_DAILY_PULSE.md
+          echo "---" >> NEXUS_DAILY_PULSE.md
+
+      - name: Commit and Broadcast to Global Internet
+        run: |
+          git config --local user.email "nexus-intelligence@google.com"
+          git config --local user.name "Piyush-Nexus-i2i"
+          git add NEXUS_DAILY_PULSE.md
+          git commit -m "Daily Pulse: $DATE [Nexus Forever Love On]"
+          git push
+          
